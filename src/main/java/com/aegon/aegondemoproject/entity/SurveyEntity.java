@@ -1,6 +1,7 @@
 package com.aegon.aegondemoproject.entity;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

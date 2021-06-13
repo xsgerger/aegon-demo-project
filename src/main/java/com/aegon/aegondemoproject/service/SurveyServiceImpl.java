@@ -18,6 +18,9 @@ public class SurveyServiceImpl implements SurveyService{
 
 	@Override
 	public SurveyEntity saveSurvey(SurveyEntity survey) {
+		if (survey.getTopic() ==null) {
+			throw new RuntimeException("You can't set Topic!");
+		}
 		return surveyRepository.saveAndFlush(survey);
 	}
 

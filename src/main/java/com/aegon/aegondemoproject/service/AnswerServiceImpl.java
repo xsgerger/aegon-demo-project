@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.aegon.aegondemoproject.entity.AnswerEntity;
 import com.aegon.aegondemoproject.entity.SurveyEntity;
@@ -21,6 +20,9 @@ public class AnswerServiceImpl implements AnswerService{
 
 	@Override
 	public AnswerEntity saveAnswer(AnswerEntity answer) {
+		if (answer.getFeedback() ==null) {
+			throw new RuntimeException("You can't set Feedback!");
+		}
 		SurveyEntity surveyEntity = npmScoreCalculate(answer);
 		answer.setSurvey(surveyEntity);
 		answerRepository.save(answer);
@@ -55,9 +57,7 @@ public class AnswerServiceImpl implements AnswerService{
 		int npmScore = (int) (100 * ((float) (promoter - detractor) / answers.size()));
 		SurveyEntity survey = answer.getSurvey();
 		survey.setNpmScore(npmScore);
-		SurveyEntity surveyEntity = surveyService.saveSurvey(survey);
-		return surveyEntity;
-
+		return surveyService.saveSurvey(survey);
 	}
 
 	@Override

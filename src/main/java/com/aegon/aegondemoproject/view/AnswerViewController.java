@@ -2,6 +2,7 @@ package com.aegon.aegondemoproject.view;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +33,7 @@ public class AnswerViewController implements Serializable {
 	private SurveyEntity surveyEntity;
 	private List<AnswerEntity> answerAllEntityList;
 	private boolean allAnswerRendered;
+	private List<Integer> scoreList=new ArrayList<>();
 
 
 	public void viewOlustur(SurveyEntity surveyEntity) {
