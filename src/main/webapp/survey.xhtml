@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head></h:head>
+<h:body>
+    <style type="text/css">
+        .dataTableStandart {
+            text-align: center;
+        }
+        .dataTableHeaderBtn {
+            margin-bottom: 10px !important;
+            width: auto !important;
+            margin-left: 3px !important;
+            margin-right: 3px !important;
+            background-color: #709aae !important;
+        }
+    </style>
+    <h:form id="form">
+        #{surveyViewController.viewOlustur()}
+        <p:panel id="listPanel">
+            <p:dataTable id="surveyListDataTable"
+                         var="survey"
+                         rowKey="#{survey.id}"
+                         widgetVar="surveyListDataTableWv"
+                         reflow="true"
+                         selectionMode="single"
+                         styleClass="dataTableStandart"
+                         value="#{surveyViewController.surveyEntityList}"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorPosition="bottom"
+                         rowsPerPageTemplate="5,10"
+                         rows="5"
+                         emptyMessage="There is no registration."
+                         selection="#{surveyViewController.surveyEntity}">
+
+                <p:ajax event="rowSelect" update=":form:listPanel,:form:savePanel"/>
+
+                <f:facet name="header">
+                    SURVEY LIST
+                    <p:outputPanel styleClass="dataTableHeaderBtn">
+                        <p:commandButton id="newRecord"
+                                         value="New Record"
+                                         process="@this"
+                                         update=":form">
+                            <f:actionListener binding="#{surveyViewController.newSurvey()}"/>
+                        </p:commandButton>
+                        <p:commandButton id="answer"
+                                         disabled="#{surveyViewController.surveyEntity.id==null}"
+                                         value="Answer Add a Record"
+                                         process="@this"
+                                         update=":form">
+                            <f:actionListener binding="#{surveyViewController.answerRedirect()}"/>
+                        </p:commandButton>
+                        <p:commandButton id="answerAll"
+                                         value="All Answer"
+                                         process="@this"
+                                         update=":form">
+                            <f:actionListener binding="#{surveyViewController.allAnswerRedirect()}"/>
+                        </p:commandButton>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Survey Id">
+                    <h:outputText id="surveyId" value="#{survey.id}"/>
+                </p:column>
+                <p:column headerText="Topic">
+                    <h:outputText id="topic" value="#{survey.topic}"/>
+                </p:column>
+                <p:column headerText="npmScore">
+                    <h:outputText id="score" value="#{survey.npmScore !=null ?survey.npmScore:0}"/>
+                </p:column>
+            </p:dataTable>
+
+        </p:panel>
+
+        <p:panel id="savePanel">
+            <p:panelGrid columns="2" layout="grid"
+                         styleClass="ui-g-4 ui-md-12">
+                <p:outputPanel>
+                    <p:outputLabel value="Topic Name" for="topicNameınputText"/>
+                    <p:inputText id="topicNameınputText" value="#{surveyViewController.surveyEntity.topic}"/>
+                </p:outputPanel>
+            </p:panelGrid>
+            <p:commandButton id="saveCommandButton"
+                             value="Survey Save"
+                             process=":form:savePanel"
+                             actionListener="#{surveyViewController.save}" update="@form"/>
+
+        </p:panel>
+
+    </h:form>
+
+</h:body>
+</html>

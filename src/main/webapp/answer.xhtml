@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head></h:head>
+<h:body>
+    <style type="text/css">
+        .dataTableStandart {
+            text-align: center;
+        }
+
+        .dataTableHeaderBtn {
+            margin-bottom: 10px !important;
+            width: auto !important;
+            margin-left: 3px !important;
+            margin-right: 3px !important;
+            background-color: #709aae !important;
+        }
+    </style>
+    <h:form id="form">
+        <p:panel  rendered="#{!answerViewController.allAnswerRendered}">
+            <p:dataTable id="answerListDataTable"
+                         var="answer"
+                         rowKey="#{answer.id}"
+                         widgetVar="answerListDataTableWv"
+                         reflow="true"
+                         selectionMode="single"
+                         styleClass="dataTableStandart"
+                         value="#{answerViewController.answerEntityList}"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorPosition="bottom"
+                         rowsPerPageTemplate="5,10"
+                         rows="5"
+                         emptyMessage="There is no registration."
+                         selection="#{answerViewController.answerEntity}">
+
+                <p:ajax event="rowSelect" update=":form:answerListDataTable,:form:savePanel"/>
+
+                <f:facet name="header">
+                    ANSWER LIST
+                    <p:outputPanel styleClass="dataTableHeaderBtn">
+                        <p:commandButton id="newRecord"
+                                         value="New Record"
+                                         process="@this"
+                                         actionListener="#{answerViewController.newanswer()}"
+                                         update=":form"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Topic Id">
+                    <h:outputText id="topicId" value="#{answer.survey.id}"/>
+                </p:column>
+                <p:column headerText="Answer Id">
+                    <h:outputText id="answerId" value="#{answer.id}"/>
+                </p:column>
+                <p:column headerText="Score">
+                    <h:outputText id="score" value="#{answer.score}"/>
+                </p:column>
+                <p:column headerText="Feedback">
+                    <h:outputText id="feedback" value="#{answer.feedback}"/>
+                </p:column>
+            </p:dataTable>
+
+        </p:panel>
+
+        <p:panel id="savePanel"  rendered="#{!answerViewController.allAnswerRendered}">
+            <p:panelGrid columns="4" layout="grid">
+                <p:outputLabel value="Score (0-9)" for="scoreInputText"/>
+                <p:inputNumber id="scoreInputText"
+                               minValue="0"
+                               maxValue="10"
+                               value="#{answerViewController.answerEntity.score}"/>
+
+                <p:outputLabel value="Feedback" for="feedbackInputText"/>
+                <p:inputTextarea id="feedbackInputText"
+                                 maxlength="500"
+                                 value="#{answerViewController.answerEntity.feedback}"/>
+            </p:panelGrid>
+            <p:commandButton id="saveCommandButton"
+                             value="Answer Save"
+                             process=":form:savePanel"
+                             actionListener="#{answerViewController.save}" update="@form"/>
+
+        </p:panel>
+        <br/>
+        <br/>
+        <br/>
+        <p:panel rendered="#{answerViewController.allAnswerRendered}">
+            <p:dataTable id="allanswerListDataTable"
+                         var="allanswer"
+                         rowKey="#{allanswer.id}"
+                         widgetVar="answerListDataTableWv2"
+                         reflow="true"
+                         selectionMode="single"
+                         styleClass="dataTableStandart"
+                         value="#{answerViewController.answerAllEntityList}"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorPosition="bottom"
+                         rowsPerPageTemplate="5,10"
+                         rows="5"
+                         emptyMessage="There is no registration.">
+
+                <f:facet name="header">
+                    ALL ANSWER LIST
+                </f:facet>
+
+                <p:column headerText="Topic Id">
+                    <h:outputText id="topicId2" value="#{allanswer.survey.id}"/>
+                </p:column>
+                <p:column headerText="Answer Id">
+                    <h:outputText id="answerId2" value="#{allanswer.id}"/>
+                </p:column>
+                <p:column headerText="Score">
+                    <h:outputText id="score2" value="#{allanswer.score}"/>
+                </p:column>
+                <p:column headerText="Feedback">
+                    <h:outputText id="feedback2" value="#{allanswer.feedback}"/>
+                </p:column>
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</h:body>
+</html>
